@@ -7,4 +7,6 @@ import java.util.List;
 public interface BookRepositoryCustom {
 
     List<Book> searchByTitleAndAuthor(String keyword);
+
+    List<Book> searchByTitleAuthorOrIsbn(String keyword);
 }

@@ -32,6 +32,11 @@ public class BookController {
         return bookService.searchBooksByTitleAndAuthor(keyword);
     }
 
+    @GetMapping("/searchAv")
+    public List<Book> searchBooksByTitleAuthorOrIsbn(@RequestParam String keyword) {
+        return bookService.searchBooksByTitleAuthorOrIsbn(keyword);
+    }
+
     @PostMapping("/{bookId}/review")
     public ResponseEntity<Void> addReview(@PathVariable String bookId, @RequestBody Book.Review review) {
         bookService.addReviewToBook(bookId, review);

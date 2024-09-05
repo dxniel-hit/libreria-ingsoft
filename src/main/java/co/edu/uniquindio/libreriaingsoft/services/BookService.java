@@ -17,6 +17,10 @@ public class BookService {
         return bookRepository.searchByTitleAndAuthor(query);
     }
 
+    public List<Book> searchBooksByTitleAuthorOrIsbn(String query) {
+        return bookRepository.searchByTitleAuthorOrIsbn(query);
+    }
+
     // Método para agregar una reseña a un libro
     public void addReviewToBook(String bookId, Book.Review review) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
@@ -30,6 +34,5 @@ public class BookService {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
         return book.getReviews();
     }
-
 
 }

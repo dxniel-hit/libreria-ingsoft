@@ -33,6 +33,10 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
         return mongoTemplate.find(query, Book.class);
     }
 
-
+    @Override
+    public List<Book> searchByTitleAuthorOrIsbn(String keyword) {
+        // Tú puedes Javi!
+        return null;
+    }
 
 }
