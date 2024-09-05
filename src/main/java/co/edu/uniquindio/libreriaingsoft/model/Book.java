@@ -33,6 +33,12 @@ public class Book {
     @Field(name = "Reviews")
     private List<Review> reviews = new ArrayList<>();
 
+    private List<Integer> ratings = new ArrayList<>();
+
+    @Field(name = "Average-Rating")
+    private double averageRating = 0.0;  // Average rating
+
+
     // Clase interna para las reseñas
     @Data
     public static class Review {
@@ -40,8 +46,31 @@ public class Book {
         private String comment;
     }
 
+    // Se usa en BookService.
     public void addReview(Review review) {
         this.reviews.add(review);
+    }
+
+    /**
+     * Añade una calificación a la lista de calificaciones.
+     * Actualiza el promedio de calificación del libro.
+     * Si se añaden 100.000 calificaciones no será muy costoso computacionalmente, ¡qué peligro!
+     * @param rating calificación del usuario
+     */
+    public void addRating(int rating) {
+        if (rating < 1 || rating > 5) {
+            throw new IllegalArgumentException("Rating must be between 1 and 5");
+        }
+        this.ratings.add(rating);
+        updateAverageRating();
+    }
+
+    private void updateAverageRating() {
+        if (ratings.isEmpty()) {
+            this.averageRating = 0.0;
+        } else {
+            this.averageRating = ratings.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+        }
     }
 }
 

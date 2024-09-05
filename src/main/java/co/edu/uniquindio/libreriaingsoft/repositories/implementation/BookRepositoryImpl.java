@@ -35,10 +35,4 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 
 
 
-    /**
-     * A user can search for books by entering a keyword that contains any combination of author, title and ISBN. Pretty complicated imo.
-     * @param keyword user input
-     * @return list of books.
-     */
-
 }
