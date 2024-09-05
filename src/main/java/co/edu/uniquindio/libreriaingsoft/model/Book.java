@@ -3,6 +3,7 @@ package co.edu.uniquindio.libreriaingsoft.model;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -12,49 +13,44 @@ public class Book {
 
     @Id
     private String id;
-    private String title;
-    private String author;
+
+    @Field(name = "ISBN")
     private String isbn;
-    private String category;
-    private String description;
-    private double price;
-    private int stock;
-    private List<Integer> ratings;
-    private double averageRating;
-    private List<String> userReviews;
 
-    public Book() {
-    }
+    @Field(name = "Book-Title")
+    private String bookTitle;
 
-    public Book(String id, String title, String author, String isbn, String category, String description, double price, int stock) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
-        this.category = category;
-        this.description = description;
-        this.price = price;
-        this.stock = stock;
-    }
+    @Field(name = "Book-Author")
+    private String bookAuthor;
 
-    public void addRating(int rating) {
-        this.ratings.add(rating);
-        updateAverageRating();
-    }
+    @Field(name = "Year-Of-Publication")
+    private String yearOfPublication;
 
-    private void updateAverageRating() {
-        if (ratings.isEmpty()) {
-            this.averageRating = 0;
-        } else {
-            this.averageRating = ratings.stream()
-                    .mapToInt(Integer::intValue)
-                    .average()
-                    .orElse(0);
-        }
-    }
+    @Field(name = "Image-URL-L")
+    private String imageUrl;
 
-    public void addReview(String review) {
-        this.userReviews.add(review);
-    }
+//    private List<Integer> ratings;
+//    private double averageRating;
+//    private List<String> userReviews;
+
+//    public void addRating(int rating) {
+//        this.ratings.add(rating);
+//        updateAverageRating();
+//    }
+//
+//    private void updateAverageRating() {
+//        if (ratings.isEmpty()) {
+//            this.averageRating = 0;
+//        } else {
+//            this.averageRating = ratings.stream()
+//                    .mapToInt(Integer::intValue)
+//                    .average()
+//                    .orElse(0);
+//        }
+//    }
+//
+//    public void addReview(String review) {
+//        this.userReviews.add(review);
+//    }
 }
 
