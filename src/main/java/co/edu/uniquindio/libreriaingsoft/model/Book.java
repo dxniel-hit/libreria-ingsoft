@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -29,28 +30,18 @@ public class Book {
     @Field(name = "Image-URL-L")
     private String imageUrl;
 
-//    private List<Integer> ratings;
-//    private double averageRating;
-//    private List<String> userReviews;
+    @Field(name = "Reviews")
+    private List<Review> reviews = new ArrayList<>();
 
-//    public void addRating(int rating) {
-//        this.ratings.add(rating);
-//        updateAverageRating();
-//    }
-//
-//    private void updateAverageRating() {
-//        if (ratings.isEmpty()) {
-//            this.averageRating = 0;
-//        } else {
-//            this.averageRating = ratings.stream()
-//                    .mapToInt(Integer::intValue)
-//                    .average()
-//                    .orElse(0);
-//        }
-//    }
-//
-//    public void addReview(String review) {
-//        this.userReviews.add(review);
-//    }
+    // Clase interna para las reseñas
+    @Data
+    public static class Review {
+        private String reviewer;
+        private String comment;
+    }
+
+    public void addReview(Review review) {
+        this.reviews.add(review);
+    }
 }
 
