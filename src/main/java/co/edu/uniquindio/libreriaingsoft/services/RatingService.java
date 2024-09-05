@@ -15,14 +15,14 @@ public class RatingService {
         this.bookRepository = bookRepository;
     }
 
-    public void rateBook(String bookId, int rating) {
-        if (rating < 1 || rating > 5) {
-            throw new IllegalArgumentException("Rating should be between 1 and 5");
-        }
-
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
-        book.addRating(rating);
-        bookRepository.save(book);
-    }
+//    public void rateBook(String bookId, int rating) {
+//        if (rating < 1 || rating > 5) {
+//            throw new IllegalArgumentException("Rating should be between 1 and 5");
+//        }
+//
+//        Book book = bookRepository.findById(bookId)
+//                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+//        book.addRating(rating);
+//        bookRepository.save(book);
+//    }
 }

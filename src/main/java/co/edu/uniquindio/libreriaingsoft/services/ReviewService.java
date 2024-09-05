@@ -13,17 +13,17 @@ public class ReviewService {
         this.bookRepository = bookRepository;
     }
 
-    public void reviewBook(String bookId, String review) {
-        if (review.isEmpty()) {
-            throw new IllegalArgumentException("Review cannot be empty");
-        }
-        if (review.length() > 5000) {
-            throw new IllegalArgumentException("Review cannot be longer than 5000 characters");
-        }
-
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
-        book.addReview(review);
-        bookRepository.save(book);
-    }
+//    public void reviewBook(String bookId, String review) {
+//        if (review.isEmpty()) {
+//            throw new IllegalArgumentException("Review cannot be empty");
+//        }
+//        if (review.length() > 5000) {
+//            throw new IllegalArgumentException("Review cannot be longer than 5000 characters");
+//        }
+//
+//        Book book = bookRepository.findById(bookId)
+//                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+//        book.addReview(review);
+//        bookRepository.save(book);
+//    }
 }
