@@ -5,10 +5,13 @@ import co.edu.uniquindio.libreriaingsoft.repositories.BookRepository;
 import co.edu.uniquindio.libreriaingsoft.services.BookService;
 import co.edu.uniquindio.libreriaingsoft.services.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/books")
@@ -28,8 +31,16 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public List<Book> searchBooksByTitleAndAuthor(@RequestParam String keyword) {
-        return bookService.searchBooksByTitleAndAuthor(keyword);
+    public ResponseEntity<Map<String, Object>> searchBooksByTitleAndAuthor(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
+        Page<Book> bookPage = bookService.searchBooksByTitleAndAuthor(keyword, page, size);
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", bookPage.getContent());
+        response.put("totalPages", bookPage.getTotalPages());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/searchAv")
@@ -63,5 +74,16 @@ public class BookController {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Book not found"));
         return ResponseEntity.ok(book.getAverageRating());
+    }
+
+    /**
+     * Gets all books
+     *
+     * @return a ResponseEntity with all the contained books
+     */
+    @GetMapping
+    public ResponseEntity<?> getAllBooksPaginated(@RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "20") int size) {
+        return bookService.findAllBooksPaginated(page, size);
     }
 }

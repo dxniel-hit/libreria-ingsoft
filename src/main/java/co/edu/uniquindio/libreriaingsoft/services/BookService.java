@@ -4,6 +4,11 @@ package co.edu.uniquindio.libreriaingsoft.services;
 import co.edu.uniquindio.libreriaingsoft.model.Book;
 import co.edu.uniquindio.libreriaingsoft.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -13,8 +18,9 @@ public class BookService {
     @Autowired
     public BookRepository bookRepository;
 
-    public List<Book> searchBooksByTitleAndAuthor(String query) {
-        return bookRepository.searchByTitleAndAuthor(query);
+    public Page<Book> searchBooksByTitleAndAuthor(String query, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return bookRepository.searchByTitleAndAuthor(query, pageable);
     }
 
     public List<Book> searchBooksByTitleAuthorOrIsbn(String query) {
@@ -33,6 +39,20 @@ public class BookService {
     public List<Book.Review> getReviewsForBook(String bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
         return book.getReviews();
+    }
+
+    /**
+     * Gets all books from the db
+     * @return
+     */
+    public ResponseEntity<?> findAllBooksPaginated(int page, int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Book> books = bookRepository.findAll(pageable);
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed books request", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

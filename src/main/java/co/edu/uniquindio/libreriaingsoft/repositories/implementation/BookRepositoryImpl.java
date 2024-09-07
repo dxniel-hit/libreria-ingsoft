@@ -4,11 +4,13 @@ import co.edu.uniquindio.libreriaingsoft.model.Book;
 import co.edu.uniquindio.libreriaingsoft.repositories.BookRepository;
 import co.edu.uniquindio.libreriaingsoft.repositories.BookRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -24,14 +26,18 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
      * @return list of books.
      */
     @Override
-    public List<Book> searchByTitleAndAuthor(String keyword) {
+    public Page<Book> searchByTitleAndAuthor(String keyword, Pageable pageable) {
         Query query = new Query();
         query.addCriteria(new Criteria().orOperator(
-                Criteria.where("Book-Title").regex(keyword, "i"), // Match MongoDB field name
-                Criteria.where("Book-Author").regex(keyword, "i") // Match MongoDB field name
+                Criteria.where("Book-Title").regex(keyword, "i"),
+                Criteria.where("Book-Author").regex(keyword, "i")
         ));
-        return mongoTemplate.find(query, Book.class);
+        long count = mongoTemplate.count(query, Book.class);
+        List<Book> books = mongoTemplate.find(query.with(pageable), Book.class);
+        return new PageImpl<>(books, pageable, count);
     }
+
+
 
     @Override
     public List<Book> searchByTitleAuthorOrIsbn(String keyword) {
