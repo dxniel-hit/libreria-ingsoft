@@ -17,7 +17,12 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Object> registerUser(@RequestBody UserDTO body) {
-        return userService.registerUser(body.email(), body.username(), body.password());
+        User newUser = new User();
+        newUser.setUsername(body.getUsername());
+        newUser.setPassword(body.getPassword());
+        newUser.setEmail(body.getEmail());
+
+        return userService.registerUser(newUser);
     }
 
     @PostMapping("/login")

@@ -51,6 +51,12 @@ public class Book {
         this.reviews.add(review);
     }
 
+    @Data
+    public static class Rating {
+        private String userId;
+        private int rating;
+    }
+
     /**
      * Añade una calificación a la lista de calificaciones.
      * Actualiza el promedio de calificación del libro.
@@ -58,9 +64,6 @@ public class Book {
      * @param rating calificación del usuario
      */
     public void addRating(int rating) {
-        if (rating < 1 || rating > 5) {
-            throw new IllegalArgumentException("Rating must be between 1 and 5");
-        }
         this.ratings.add(rating);
         updateAverageRating();
     }

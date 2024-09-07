@@ -17,17 +17,16 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public ResponseEntity<Object> registerUser(String email, String username, String password) {
-        if (userRepository.findByEmail(email).isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("{\"message\": \"User with this email already exists\"}");
+    public ResponseEntity<Object> registerUser(User user) {
+        // Check if the user with the same email or username already exists
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("User with this email already exists.");
+        }
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("User with this username already exists.");
         }
 
-        User user = new User();
-        user.setEmail(email);
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-
+        // Save the user; MongoDB will automatically generate the ID
         userRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -51,4 +50,15 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK)
                 .body("{\"userId\": \"" + user.getId() + "\"}");
     }
+
+    /**
+     * Checks if user is registered.
+     * @param userId String
+     * @return boolean
+     */
+    public boolean isUserRegistered(String userId) {
+        // Check in the database if the user exists
+        return userRepository.existsById(userId);
+    }
+
 }

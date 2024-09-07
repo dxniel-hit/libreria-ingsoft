@@ -12,11 +12,8 @@ public class RatingService {
     private BookRepository bookRepository;
 
     public void rateBook(String bookId, int rating) {
-        if (rating < 1 || rating > 5) {
-            throw new IllegalArgumentException("Rating must be between 1 and 5");
-        }
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+        Book book = bookRepository.findById(bookId).orElse(null);
+        assert book != null;
         book.addRating(rating);
         bookRepository.save(book);
     }

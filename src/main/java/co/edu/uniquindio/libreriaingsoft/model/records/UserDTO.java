@@ -1,4 +1,11 @@
 package co.edu.uniquindio.libreriaingsoft.model.records;
 
-public record UserDTO(String email, String username, String password) {
+import lombok.Data;
+
+@Data
+public class UserDTO{
+
+    String email;
+    String username;
+    String password;
 }
