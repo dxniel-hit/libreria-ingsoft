@@ -18,6 +18,9 @@ public class BookService {
     @Autowired
     public BookRepository bookRepository;
 
+    @Autowired
+    private UserService userService;
+
     public Page<Book> searchBooksByTitleAndAuthor(String query, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return bookRepository.searchByTitleAndAuthor(query, pageable);
@@ -29,8 +32,18 @@ public class BookService {
 
     // Método para agregar una reseña a un libro
     public void addReviewToBook(String bookId, Book.Review review) {
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
-        book.addReview(review); // Parsear en el back y front
+        // Buscar el libro por su ID
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+
+        // Obtener el username a partir del userId del review
+        String username = userService.findUsernameById(review.getReviewer());
+
+        // Asignar el username a la reseña
+        review.setReviewer(username);
+
+        // Agregar la reseña al libro y guardarlo
+        book.addReview(review);
         bookRepository.save(book);
     }
 

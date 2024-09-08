@@ -17,6 +17,12 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    public String findUsernameById(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return user.getUsername();
+    }
+
     public ResponseEntity<Object> registerUser(User user) {
         // Check if the user with the same email or username already exists
         if (userRepository.existsByEmail(user.getEmail())) {
