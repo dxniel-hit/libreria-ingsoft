@@ -40,9 +40,16 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 
 
     @Override
-    public List<Book> searchByTitleAuthorOrIsbn(String keyword) {
-        // Tú puedes Javi!
-        return null;
+    public Page<Book> searchByTitleAuthorOrIsbn(String keyword, Pageable pageable) {
+        Query query = new Query();
+        query.addCriteria(new Criteria().orOperator(
+                Criteria.where("Book-Title").regex(keyword, "i"),
+                Criteria.where("Book-Author").regex(keyword, "i"),
+                Criteria.where("ISBN").regex(keyword, "i")
+        ));
+        long count = mongoTemplate.count(query, Book.class);
+        List<Book> books = mongoTemplate.find(query.with(pageable), Book.class);
+        return new PageImpl<>(books, pageable, count);
     }
 
 }

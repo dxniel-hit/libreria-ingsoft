@@ -10,5 +10,5 @@ public interface BookRepositoryCustom {
 
     Page<Book> searchByTitleAndAuthor(String keyword, Pageable pageable);
 
-    List<Book> searchByTitleAuthorOrIsbn(String keyword);
+    Page<Book> searchByTitleAuthorOrIsbn(String keyword, Pageable pageable);
 }

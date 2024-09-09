@@ -26,8 +26,9 @@ public class BookService {
         return bookRepository.searchByTitleAndAuthor(query, pageable);
     }
 
-    public List<Book> searchBooksByTitleAuthorOrIsbn(String query) {
-        return bookRepository.searchByTitleAuthorOrIsbn(query);
+    public Page<Book> searchBooksByTitleAuthorOrIsbn(String query, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return bookRepository.searchByTitleAuthorOrIsbn(query, pageable);
     }
 
     // Método para agregar una reseña a un libro

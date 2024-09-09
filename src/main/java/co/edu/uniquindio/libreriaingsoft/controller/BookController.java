@@ -61,11 +61,19 @@ public class BookController {
      * Given a keyword, the keyword will look in the author, title or isbn attributes of the Book class.
      * Second option an usar has to search a book.
      * @param keyword String
-     * @return null for now.
+     * @return content and total pages of books.
      */
     @GetMapping("/searchAv")
-    public List<Book> searchBooksByTitleAuthorOrIsbn(@RequestParam String keyword) {
-        return bookService.searchBooksByTitleAuthorOrIsbn(keyword);
+    public ResponseEntity<Map<String, Object>> searchBooksByTitleAuthorOrIsbn(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
+        Page<Book> bookPage = bookService.searchBooksByTitleAuthorOrIsbn(keyword, page, size);
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", bookPage.getContent());
+        response.put("totalPages", bookPage.getTotalPages());
+        return ResponseEntity.ok(response);
     }
 
     /**
